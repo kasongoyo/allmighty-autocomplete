@@ -1,44 +1,96 @@
 /* AUTOCOMPLETE */
 
-.autocomplete{
-  width: 100%;
-  position: relative;
+.autocomplete {
+    width: 100%;
+    position: relative;
 }
 
-.autocomplete input{
-  font-size: 1.2em;
-  width: 100%;
-  padding:0.4em;
+.autocomplete__searchBox {
+    display: table;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #a9a9a9;
+    position: relative;
 }
 
-.autocomplete ul{
-  position: absolute;
-  left: 0;
-  width: 100%;
-  border-left: 1px solid #888;
-  border-right: 1px solid #888;
-  border-bottom: 1px solid #888;
-  z-index: 1;
+.autocomplete__searchBox--focus {
+    border-color: #2780f8;
 }
 
-.autocomplete li{
-  text-align: left;
-  list-style:none;
-  width: 100%;
-  padding:0.4em;
-  background-color: #fff;
+.autocomplete__inputField {
+    width: 100%;
+    border: none;
+    outline-offset: 0;
+    outline: 0;
+    font-size: 1.2em;
+    padding: 7px;
 }
 
-.autocomplete li.active{
-  width: 100%;
-  background-color: #4bf;
+.autocomplete__inputField,
+.autocomplete__clearBtn,
+.autocomplete__searchToolsBtnIcon {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.autocomplete__clearBtn {
+    font-size: 24px;
+}
+
+.autocomplete__searchToolsBtnIcon {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.autocomplete__clearBtn,
+.autocomplete__searchToolsBtnIcon {
+    color: #a9a9a9;
+    cursor: pointer;
+    text-align: center;
+}
+
+.autocomplete__suggestions,
+.autocomplete__searchTools {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: #fff;
+}
+
+.autocomplete__suggestion {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+}
+
+.autocomplete__suggestion--last {
+    border-bottom: 1px solid #ccc;
+}
+
+.autocomplete__suggestion.is-active {
+    background-color: #e5e5e5;
 }
 
 .autocomplete .highlight {
-  background-color: #E2E2E2;
+    background-color: #E2E2E2;
 }
 
-.autocomplete li.active .highlight {
-  background: #666;
-  color: #fff;
+.autocomplete__suggestion.is-active .highlight {
+    background: #7f7f7f;
+    color: #fff;
+}
+
+.autocomplete__searchToolsBtn {
+    padding: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.autocomplete__searchToolsBtn:focus,
+.autocomplete__searchToolsBtn:hover {
+    background-color: #ccc;
 }

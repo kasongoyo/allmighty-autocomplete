@@ -1,0 +1,20 @@
+<div class="autocomplete">
+    <div class="autocomplete__searchBox {{ attrs.inputclass }}" ng-class="{'autocomplete__searchBox--focus':focusSearchBox}">
+        <input type="text" class=" autocomplete__inputField {{ attrs.inputclass }}" ng-model="searchParam" placeholder="{{ attrs.placeholder }}" tabindex="{{ attrs.tabindex }}" id="{{ attrs.inputid }}" name="{{ attrs.name }}" ng-required="{{ autocompleteRequired }}" ng-focus="focusSearchBox = true; showSearchTools = false" ng-blur="focusSearchBox = false" show-focus="focusSearchBox" />
+        <span class="autocomplete__clearBtn" ng-show="searchParam" title="Clear" ng-click="focusSearchBox = true; searchParam=undefined">&#10005</span>
+        <span class="autocomplete__searchToolsBtnIcon" title="Search options" ng-click="showSearchTools = !showSearchTools; completing=false" ng-show="enableSearchTool">&#9662</span>
+    </div>
+    <div class="autocomplete__suggestions" ng-if="!showSearchTools">
+        <div ng-if="!noAutoSort" ng-show="completing && (suggestions | filter:searchFilter).length > 0">
+            <div class="autocomplete__suggestion" suggestion ng-repeat="suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index" index="{{ $index }}" val="{{ suggestion }}" ng-class="{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }" ng-click="select(suggestion)" ng-bind-html="suggestion | highlight:searchParam">
+            </div>
+            <div class="autocomplete__searchToolsBtn" title="Click to see more search tools" ng-hide="searchParam || !enableSearchTool" ng-click="activateSearchTools()">More search tools
+            </div>
+        </div>
+        <div ng-if="noAutoSort" ng-show="completing && (suggestions | filter:searchFilter).length > 0">
+            <div class="autocomplete__suggestion" suggestion ng-repeat="suggestion in suggestions | filter:searchFilter track by $index" index="{{ $index }}" val="{{ suggestion }}" ng-class="{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }" ng-click="select(suggestion)" ng-bind-html="suggestion | highlight:searchParam"></div>
+        </div>
+    </div>
+    <div class="autocomplete__searchTools" ng-if="enableSearchTool && showSearchTools" ng-transclude>
+    </div>
+</div>
