@@ -14,7 +14,8 @@ app.directive('autocomplete', function() {
             onSelect: '=onSelect',
             autocompleteRequired: '=',
             noAutoSort: '=noAutoSort',
-            enableSearchTool: '='
+            enableSearchTool: '@',
+            showSearchTools:'='
         },
         transclude: true,
         controller: ['$scope', function($scope) {
@@ -316,7 +317,7 @@ angular.module('autocomplete').run(['$templateCache', function($templateCache) {
     "        <div ng-if=\"!noAutoSort\" ng-show=\"completing && (suggestions | filter:searchFilter).length > 0\">\n" +
     "            <div class=\"autocomplete__suggestion\" suggestion ng-repeat=\"suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index\" index=\"{{ $index }}\" val=\"{{ suggestion }}\" ng-class=\"{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }\" ng-click=\"select(suggestion)\" ng-bind-html=\"suggestion | highlight:searchParam\">\n" +
     "            </div>\n" +
-    "            <div class=\"autocomplete__searchToolsBtn\" title=\"Click to see more search tools\" ng-hide=\"searchParam || !enableSearchTool\" ng-click=\"activateSearchTools()\">More search tools\n" +
+    "            <div class=\"autocomplete__searchToolsBtn\" title=\"Click to see more search tools\" ng-hide=\"searchParam || !enableSearchTool\" ng-click=\"activateSearchTools()\">More search tools{{searchParam == true}}\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div ng-if=\"noAutoSort\" ng-show=\"completing && (suggestions | filter:searchFilter).length > 0\">\n" +
