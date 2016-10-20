@@ -15,7 +15,7 @@ app.directive('autocomplete', function() {
             autocompleteRequired: '=',
             noAutoSort: '=noAutoSort',
             enableSearchTool: '@',
-            showSearchTools:'='
+            showSearchTools:'=?'
         },
         transclude: true,
         controller: ['$scope', function($scope) {
