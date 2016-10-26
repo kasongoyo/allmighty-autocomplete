@@ -15,7 +15,8 @@ app.directive('autocomplete', function() {
             autocompleteRequired: '=',
             noAutoSort: '=noAutoSort',
             enableSearchTool: '@',
-            showSearchTools:'=?'
+            showSearchTools: '=?',
+            size: '@?'
         },
         transclude: true,
         controller: ['$scope', function($scope) {
@@ -125,6 +126,7 @@ app.directive('autocomplete', function() {
             };
 
             for (var a in attrs) {
+                console.log(attrs);
                 attr = a.replace('attr', '').toLowerCase();
                 // add attribute overriding defaults
                 // and preventing duplication
@@ -133,8 +135,22 @@ app.directive('autocomplete', function() {
                 }
             }
 
+            //search box size
+            if (scope.size) {
+                switch (scope.size) {
+                    case 'large':
+                        scope.attrs['size'] = 'acSearchBox--large';
+                        break;
+                    case 'big':
+                        scope.attrs['size'] = 'acSearchBox--big';
+                        break;
+                    default:
+                        scope.attrs['size'] = '';
+                }
+            }
+
             if (attrs.clickActivation) {
-                var inputField = element[0].querySelector('.autocomplete__inputField');
+                var inputField = element[0].querySelector('.acSearchBox__input');
                 inputField.onclick = function(e) {
                     if (!scope.searchParam) {
                         setTimeout(function() {

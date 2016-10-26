@@ -15,7 +15,8 @@ app.directive('autocomplete', function() {
             autocompleteRequired: '=',
             noAutoSort: '=noAutoSort',
             enableSearchTool: '@',
-            showSearchTools:'=?'
+            showSearchTools: '=?',
+            size: '@?'
         },
         transclude: true,
         controller: ['$scope', function($scope) {
@@ -125,6 +126,7 @@ app.directive('autocomplete', function() {
             };
 
             for (var a in attrs) {
+                console.log(attrs);
                 attr = a.replace('attr', '').toLowerCase();
                 // add attribute overriding defaults
                 // and preventing duplication
@@ -133,8 +135,22 @@ app.directive('autocomplete', function() {
                 }
             }
 
+            //search box size
+            if (scope.size) {
+                switch (scope.size) {
+                    case 'large':
+                        scope.attrs['size'] = 'acSearchBox--large';
+                        break;
+                    case 'big':
+                        scope.attrs['size'] = 'acSearchBox--big';
+                        break;
+                    default:
+                        scope.attrs['size'] = '';
+                }
+            }
+
             if (attrs.clickActivation) {
-                var inputField = element[0].querySelector('.autocomplete__inputField');
+                var inputField = element[0].querySelector('.acSearchBox__input');
                 inputField.onclick = function(e) {
                     if (!scope.searchParam) {
                         setTimeout(function() {
@@ -308,16 +324,17 @@ angular.module('autocomplete').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('autocomplete.html',
     "<div class=\"autocomplete\">\n" +
-    "    <div class=\"autocomplete__searchBox {{ attrs.inputclass }}\" ng-class=\"{'autocomplete__searchBox--focus':focusSearchBox}\">\n" +
-    "        <input type=\"text\" class=\" autocomplete__inputField {{ attrs.inputclass }}\" ng-model=\"searchParam\" placeholder=\"{{ attrs.placeholder }}\" tabindex=\"{{ attrs.tabindex }}\" id=\"{{ attrs.inputid }}\" name=\"{{ attrs.name }}\" ng-required=\"{{ autocompleteRequired }}\" ng-focus=\"focusSearchBox = true; showSearchTools = false\" ng-blur=\"focusSearchBox = false\" show-focus=\"focusSearchBox\" />\n" +
-    "        <span class=\"autocomplete__clearBtn\" ng-show=\"searchParam\" title=\"Clear\" ng-click=\"focusSearchBox = true; searchParam=undefined\" ng-class=\"{'autocomplete__clearBtn--searchToolsDisable':!enableSearchTool}\">&#10005</span>\n" +
-    "        <span class=\"autocomplete__searchToolsBtnIcon\" title=\"Search options\" ng-click=\"showSearchTools = !showSearchTools; completing=false\" ng-show=\"enableSearchTool\">&#9662</span>\n" +
+    "    <div class=\"acSearchBox {{ attrs.size }} {{ attrs.inputclass }}\" ng-class=\"{'acSearchBox--focus':focusSearchBox}\">\n" +
+    "        <input type=\"text\" class=\"acSearchBox__input\" ng-model=\"searchParam\" placeholder=\"{{ attrs.placeholder }}\" tabindex=\"{{ attrs.tabindex }}\" id=\"{{ attrs.inputid }}\" name=\"{{ attrs.name }}\" ng-required=\"{{ autocompleteRequired }}\" ng-focus=\"focusSearchBox = true; showSearchTools = false\" ng-blur=\"focusSearchBox = false\" show-focus=\"focusSearchBox\" />\n" +
+    "        <i class=\"acSearchBox__clearTextIcon\" ng-show=\"searchParam\" title=\"Clear\" ng-click=\"focusSearchBox = true; searchParam=undefined\">&#215</i>\n" +
+    "        <i class=\"acSearchBox__dropdownIcon\" title=\"Search options\" ng-click=\"showSearchTools = !showSearchTools; completing=false\" ng-show=\"enableSearchTool\">\n" +
+    "        &#9660</i>\n" +
     "    </div>\n" +
     "    <div class=\"autocomplete__suggestions\" ng-if=\"!showSearchTools\">\n" +
     "        <div ng-if=\"!noAutoSort\" ng-show=\"completing && (suggestions | filter:searchFilter).length > 0\">\n" +
     "            <div class=\"autocomplete__suggestion\" suggestion ng-repeat=\"suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index\" index=\"{{ $index }}\" val=\"{{ suggestion }}\" ng-class=\"{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }\" ng-click=\"select(suggestion)\" ng-bind-html=\"suggestion | highlight:searchParam\">\n" +
     "            </div>\n" +
-    "            <div class=\"autocomplete__searchToolsBtn\" title=\"Click to see more search tools\" ng-hide=\"searchParam || !enableSearchTool\" ng-click=\"activateSearchTools()\">More search tools{{searchParam == true}}\n" +
+    "            <div class=\"autocomplete__searchToolsBtn\" title=\"Click to see more search tools\" ng-hide=\"!enableSearchTool\" ng-click=\"activateSearchTools()\">More search tools\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div ng-if=\"noAutoSort\" ng-show=\"completing && (suggestions | filter:searchFilter).length > 0\">\n" +
