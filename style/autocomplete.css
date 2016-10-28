@@ -3,6 +3,7 @@
 .autocomplete {
     width: 100%;
     position: relative;
+    background-color: #fff;
 }
 
 .acSearchBox {
@@ -29,7 +30,7 @@
     padding-right: 5em;
     padding-top: .67861429em;
     padding-bottom: .67861429em;
-    font-size: .92857143em;
+    font-size: 1em;
 }
 
 .acSearchBox__dropdownIcon,
@@ -50,7 +51,9 @@
 }
 
 .acSearchBox__clearTextIcon {
-    right: 2.67142857em;
+    font-size: 1.5em;
+    right: 1.8em;
+    top: 0.3em;
     text-align: right;
 }
 
@@ -64,6 +67,7 @@
     top: 0.3em;
     width: 1.8em;
 }
+
 .acSearchBox--large > .acSearchBox__dropdownIcon {
     top: 0.7em;
 }
@@ -82,6 +86,7 @@
     top: 0.2em;
     width: 1.4em;
 }
+
 .acSearchBox--big > .acSearchBox__dropdownIcon {
     top: 1.1em;
 }
@@ -135,7 +140,6 @@
 .autocomplete__searchToolsBtn:hover {
     background-color: #ccc;
 }
-
 
 
 /*
@@ -204,11 +208,18 @@
     padding-right: 10px;
 }*/
 
+
 /*.autocomplete__searchToolsBtnIcon {
     position: absolute;
     right: 1em;*/
-    /*padding-right: 10px;*/
-    /*top: 20%;*/
+
+
+/*padding-right: 10px;*/
+
+
+/*top: 20%;*/
+
+
 /*    top: 0.785714286em;
     margin: -.78571429em;
     padding: .78571429em;
@@ -221,4 +232,3 @@
     cursor: pointer;
     z-index: 1;
 }*/
-

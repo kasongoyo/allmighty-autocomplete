@@ -126,7 +126,6 @@ app.directive('autocomplete', function() {
             };
 
             for (var a in attrs) {
-                console.log(attrs);
                 attr = a.replace('attr', '').toLowerCase();
                 // add attribute overriding defaults
                 // and preventing duplication
