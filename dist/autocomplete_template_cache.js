@@ -11,7 +11,7 @@ angular.module('autocomplete').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "    <div class=\"autocomplete__suggestions\" ng-if=\"!showSearchTools\">\n" +
     "        <div ng-if=\"!noAutoSort\" ng-show=\"completing && (suggestions | filter:searchFilter).length > 0\">\n" +
-    "            <div class=\"autocomplete__suggestion\" suggestion ng-repeat=\"suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index\" index=\"{{ $index }}\" val=\"{{ suggestion }}\" ng-class=\"{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }\" ng-click=\"select(suggestion)\" ng-bind-html=\"suggestion | highlight:searchParam\">\n" +
+    "            <div class=\"autocomplete__suggestion\" suggestion ng-repeat=\"suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index\" index=\"{{ $index }}\" val=\"{{ suggestion }}\" ng-class=\"{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }\" ng-click=\"select(suggestion)\" ng-bind-html=\"suggestion | highlight:searchParam:suggestionKey\">\n" +
     "            </div>\n" +
     "            <div class=\"autocomplete__searchToolsBtn\" title=\"Click to see more search tools\" ng-hide=\"!enableSearchTool\" ng-click=\"activateSearchTools()\">More search tools\n" +
     "            </div>\n" +

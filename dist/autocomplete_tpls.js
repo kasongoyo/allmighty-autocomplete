@@ -10,6 +10,7 @@ app.directive('autocomplete', function() {
         scope: {
             searchParam: '=ngModel',
             suggestions: '=data',
+            suggestionKey: '@key',
             onType: '=onType',
             onSelect: '=onSelect',
             autocompleteRequired: '=',
@@ -67,7 +68,7 @@ app.directive('autocomplete', function() {
 
                 // function thats passed to on-type attribute gets executed
                 if ($scope.onType)
-                    $scope.onType($scope.searchParam);
+                    $scope.onType($scope.searchFilter);
             });
 
             // for hovering over suggestions
@@ -95,7 +96,12 @@ app.directive('autocomplete', function() {
             // selecting a suggestion with RIGHT ARROW or ENTER
             $scope.select = function(suggestion) {
                 if (suggestion) {
-                    $scope.searchParam = suggestion;
+                    if(typeof suggestion === 'object'){
+                        $scope.searchParam = suggestion['name'];
+                    }else{
+                        $scope.searchParam = suggestion;
+                    }
+                    
                     $scope.searchFilter = suggestion;
                     if ($scope.onSelect)
                         $scope.onSelect(suggestion);
@@ -273,14 +279,25 @@ app.directive('autocomplete', function() {
 });
 
 app.filter('highlight', ['$sce', function($sce) {
-    return function(input, searchParam) {
+    return function(input, searchParam, highlightKey) {
         if (typeof input === 'function') return '';
+        if (typeof input === 'object') input = input[highlightKey]
         if (searchParam) {
-            var words = '(' +
-                searchParam.split(/\ /).join(' |') + '|' +
-                searchParam.split(/\ /).join('|') +
-                ')',
-                exp = new RegExp(words, 'gi');
+            var words;
+            if (typeof searchParam === 'object') {
+                words = '(' +
+                    searchParam[highlightKey].split(/\ /).join(' |') + '|' +
+                    searchParam[highlightKey].split(/\ /).join('|') +
+                    ')',
+                    exp = new RegExp(words, 'gi');
+            } else {
+                words = '(' +
+                    searchParam.split(/\ /).join(' |') + '|' +
+                    searchParam.split(/\ /).join('|') +
+                    ')',
+                    exp = new RegExp(words, 'gi');
+            }
+
             if (words.length) {
                 input = input.replace(exp, "<span class=\"highlight\">$1</span>");
             }
@@ -331,7 +348,7 @@ angular.module('autocomplete').run(['$templateCache', function($templateCache) {
     "    </div>\n" +
     "    <div class=\"autocomplete__suggestions\" ng-if=\"!showSearchTools\">\n" +
     "        <div ng-if=\"!noAutoSort\" ng-show=\"completing && (suggestions | filter:searchFilter).length > 0\">\n" +
-    "            <div class=\"autocomplete__suggestion\" suggestion ng-repeat=\"suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index\" index=\"{{ $index }}\" val=\"{{ suggestion }}\" ng-class=\"{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }\" ng-click=\"select(suggestion)\" ng-bind-html=\"suggestion | highlight:searchParam\">\n" +
+    "            <div class=\"autocomplete__suggestion\" suggestion ng-repeat=\"suggestion in suggestions | filter:searchFilter | orderBy:'toString()' track by $index\" index=\"{{ $index }}\" val=\"{{ suggestion }}\" ng-class=\"{ 'is-active': ($index === selectedIndex), 'autocomplete__suggestion--last': $last }\" ng-click=\"select(suggestion)\" ng-bind-html=\"suggestion | highlight:searchParam:suggestionKey\">\n" +
     "            </div>\n" +
     "            <div class=\"autocomplete__searchToolsBtn\" title=\"Click to see more search tools\" ng-hide=\"!enableSearchTool\" ng-click=\"activateSearchTools()\">More search tools\n" +
     "            </div>\n" +

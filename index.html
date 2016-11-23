@@ -14,15 +14,15 @@
     <div ng-controller="MyCtrl">
         <div class="main" style="width: 600px">
             <h2>Search for new released movies:</h2>
-            <autocomplete ng-model="result" attr-placeholder="type to search movies..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse" enable-search-tool=true>
+            <autocomplete ng-model="result" attr-placeholder="type to search movies..." click-activation="true" data="movies" data-key="name" on-type="doSomething" on-select="doSomethingElse" enable-search-tool=true>
                 Display filters
             </autocomplete>  
-            <autocomplete ng-model="result" attr-placeholder="type to search movies..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse" enable-search-tool=true size="large">
+          <!--   <autocomplete ng-model="result" attr-placeholder="type to search movies..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse" enable-search-tool=true size="large">
                 Display filters
             </autocomplete> 
             <autocomplete ng-model="result" attr-placeholder="type to search movies..." click-activation="true" data="movies" on-type="doSomething" on-select="doSomethingElse" enable-search-tool=true size="big">
                 Display filters
-            </autocomplete>
+            </autocomplete> -->
             <br>
             <a ng-click="showSearchTools = false" href="">Hide searchTools</a>
             <div class="description">

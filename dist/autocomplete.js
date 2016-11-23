@@ -10,6 +10,7 @@ app.directive('autocomplete', function() {
         scope: {
             searchParam: '=ngModel',
             suggestions: '=data',
+            suggestionKey: '@key',
             onType: '=onType',
             onSelect: '=onSelect',
             autocompleteRequired: '=',
@@ -67,7 +68,7 @@ app.directive('autocomplete', function() {
 
                 // function thats passed to on-type attribute gets executed
                 if ($scope.onType)
-                    $scope.onType($scope.searchParam);
+                    $scope.onType($scope.searchFilter);
             });
 
             // for hovering over suggestions
@@ -95,7 +96,12 @@ app.directive('autocomplete', function() {
             // selecting a suggestion with RIGHT ARROW or ENTER
             $scope.select = function(suggestion) {
                 if (suggestion) {
-                    $scope.searchParam = suggestion;
+                    if(typeof suggestion === 'object'){
+                        $scope.searchParam = suggestion['name'];
+                    }else{
+                        $scope.searchParam = suggestion;
+                    }
+                    
                     $scope.searchFilter = suggestion;
                     if ($scope.onSelect)
                         $scope.onSelect(suggestion);
@@ -273,14 +279,25 @@ app.directive('autocomplete', function() {
 });
 
 app.filter('highlight', ['$sce', function($sce) {
-    return function(input, searchParam) {
+    return function(input, searchParam, highlightKey) {
         if (typeof input === 'function') return '';
+        if (typeof input === 'object') input = input[highlightKey]
         if (searchParam) {
-            var words = '(' +
-                searchParam.split(/\ /).join(' |') + '|' +
-                searchParam.split(/\ /).join('|') +
-                ')',
-                exp = new RegExp(words, 'gi');
+            var words;
+            if (typeof searchParam === 'object') {
+                words = '(' +
+                    searchParam[highlightKey].split(/\ /).join(' |') + '|' +
+                    searchParam[highlightKey].split(/\ /).join('|') +
+                    ')',
+                    exp = new RegExp(words, 'gi');
+            } else {
+                words = '(' +
+                    searchParam.split(/\ /).join(' |') + '|' +
+                    searchParam.split(/\ /).join('|') +
+                    ')',
+                    exp = new RegExp(words, 'gi');
+            }
+
             if (words.length) {
                 input = input.replace(exp, "<span class=\"highlight\">$1</span>");
             }
