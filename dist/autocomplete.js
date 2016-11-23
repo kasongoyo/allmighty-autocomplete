@@ -97,7 +97,7 @@ app.directive('autocomplete', function() {
             $scope.select = function(suggestion) {
                 if (suggestion) {
                     if(typeof suggestion === 'object'){
-                        $scope.searchParam = suggestion['name'];
+                        $scope.searchParam = suggestion[$scope.suggestionKey];
                     }else{
                         $scope.searchParam = suggestion;
                     }
