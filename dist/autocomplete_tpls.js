@@ -2,7 +2,7 @@
 
 var app = angular.module('autocomplete', []);
 
-app.directive('autocomplete', function() {
+app.directive('autocomplete', function () {
     var index = -1;
 
     return {
@@ -17,26 +17,27 @@ app.directive('autocomplete', function() {
             noAutoSort: '=noAutoSort',
             enableSearchTool: '@',
             showSearchTools: '=?',
-            size: '@?'
+            size: '@?',
+            onEnterKeyPressed: '&'
         },
         transclude: true,
-        controller: ['$scope', function($scope) {
+        controller: ['$scope', function ($scope) {
             // the index of the suggestions that's currently selected
             $scope.selectedIndex = -1;
 
             $scope.initLock = true;
 
             // set new index
-            $scope.setIndex = function(i) {
+            $scope.setIndex = function (i) {
                 $scope.selectedIndex = parseInt(i);
             };
 
-            this.setIndex = function(i) {
+            this.setIndex = function (i) {
                 $scope.setIndex(i);
                 $scope.$apply();
             };
 
-            $scope.getIndex = function(i) {
+            $scope.getIndex = function (i) {
                 return $scope.selectedIndex;
             };
 
@@ -49,12 +50,12 @@ app.directive('autocomplete', function() {
             //show search tools panel
             $scope.showSearchTools = false;
 
-            $scope.activateSearchTools = function() {
+            $scope.activateSearchTools = function () {
                 $scope.showSearchTools = true;
             }
 
             // starts autocompleting on typing in something
-            $scope.$watch('searchParam', function(newValue, oldValue) {
+            $scope.$watch('searchParam', function (newValue, oldValue) {
 
                 if (oldValue === newValue || (!oldValue && $scope.initLock)) {
                     return;
@@ -94,28 +95,28 @@ app.directive('autocomplete', function() {
             // $scope.preSelectOff = this.preSelectOff;
 
             // selecting a suggestion with RIGHT ARROW or ENTER
-            $scope.select = function(suggestion) {
+            $scope.select = function (suggestion) {
                 if (suggestion) {
-                    if(typeof suggestion === 'object'){
+                    if (typeof suggestion === 'object') {
                         $scope.searchParam = suggestion[$scope.suggestionKey];
-                    }else{
+                    } else {
                         $scope.searchParam = suggestion;
                     }
-                    
+
                     $scope.searchFilter = suggestion;
                     if ($scope.onSelect)
                         $scope.onSelect(suggestion);
                 }
                 watching = false;
                 $scope.completing = false;
-                setTimeout(function() { watching = true; }, 1000);
+                setTimeout(function () { watching = true; }, 1000);
                 $scope.setIndex(-1);
             };
 
 
         }],
-        link: function(scope, element, attrs) {
-            setTimeout(function() {
+        link: function (scope, element, attrs) {
+            setTimeout(function () {
                 scope.initLock = false;
                 scope.$apply();
             }, 250);
@@ -156,9 +157,9 @@ app.directive('autocomplete', function() {
 
             if (attrs.clickActivation) {
                 var inputField = element[0].querySelector('.acSearchBox__input');
-                inputField.onclick = function(e) {
+                inputField.onclick = function (e) {
                     if (!scope.searchParam) {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             scope.completing = true;
                             scope.$apply();
                         }, 200);
@@ -168,7 +169,7 @@ app.directive('autocomplete', function() {
 
             var key = { left: 37, up: 38, right: 39, down: 40, enter: 13, esc: 27, tab: 9 };
 
-            document.addEventListener("keydown", function(e) {
+            document.addEventListener("keydown", function (e) {
                 var keycode = e.keyCode || e.which;
 
                 switch (keycode) {
@@ -178,20 +179,22 @@ app.directive('autocomplete', function() {
                         scope.setIndex(-1);
                         scope.$apply();
                         e.preventDefault();
+                    case key.enter:
+                        scope.onEnterKeyPressed();
                 }
             }, true);
 
-            document.addEventListener("blur", function(e) {
+            document.addEventListener("blur", function (e) {
                 // disable suggestions on blur
                 // we do a timeout to prevent hiding it before a click event is registered
-                setTimeout(function() {
+                setTimeout(function () {
                     scope.select();
                     scope.setIndex(-1);
                     scope.$apply();
                 }, 150);
             }, true);
 
-            element[0].addEventListener("keydown", function(e) {
+            element[0].addEventListener("keydown", function (e) {
                 var keycode = e.keyCode || e.which;
 
                 // var l = angular.element(this).find('li').length;
@@ -278,8 +281,8 @@ app.directive('autocomplete', function() {
     };
 });
 
-app.filter('highlight', ['$sce', function($sce) {
-    return function(input, searchParam, highlightKey) {
+app.filter('highlight', ['$sce', function ($sce) {
+    return function (input, searchParam, highlightKey) {
         if (typeof input === 'function') return '';
         if (typeof input === 'object') input = input[highlightKey]
         if (searchParam) {
@@ -306,17 +309,17 @@ app.filter('highlight', ['$sce', function($sce) {
     };
 }]);
 
-app.directive('suggestion', function() {
+app.directive('suggestion', function () {
     return {
         restrict: 'A',
         require: '^autocomplete', // ^look for controller on parents element
-        link: function(scope, element, attrs, autoCtrl) {
-            element.bind('mouseenter', function() {
+        link: function (scope, element, attrs, autoCtrl) {
+            element.bind('mouseenter', function () {
                 // autoCtrl.preSelect(attrs.val);
                 autoCtrl.setIndex(attrs.index);
             });
 
-            element.bind('mouseleave', function() {
+            element.bind('mouseleave', function () {
                 // autoCtrl.preSelectOff();
                 autoCtrl.setIndex(-1);
             });
@@ -324,11 +327,11 @@ app.directive('suggestion', function() {
     };
 });
 
-app.directive('showFocus', function($timeout) {
-    return function(scope, element, attrs) {
+app.directive('showFocus', function ($timeout) {
+    return function (scope, element, attrs) {
         scope.$watch(attrs.showFocus,
-            function(newValue) {
-                $timeout(function() {
+            function (newValue) {
+                $timeout(function () {
                     newValue && element[0].focus();
                 });
             }, true);

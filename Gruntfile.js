@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     // Configurable paths for the application
     var appConfig = {
         app: require('./bower.json').appPath || 'dist',
-        appStyle:'style'
+        appStyle: 'style'
     };
 
     // Define the configuration for all the tasks
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= yeoman.app %>/{,**/}*.js'],
-                tasks: ['ngtemplates', 'newer:jshint:all', 'newer:jscs:all'],
+                tasks: ['ngtemplates', 'concat', 'newer:jshint:all', 'newer:jscs:all'],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
             livereload: {
                 options: {
                     open: true,
-                    middleware: function(connect) {
+                    middleware: function (connect) {
                         return [
                             connect().use(
                                 '/bower_components',
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
             test: {
                 options: {
                     port: 9001,
-                    middleware: function(connect) {
+                    middleware: function (connect) {
                         return [
                             connect.static('test'),
                             connect().use(
@@ -157,15 +157,15 @@ module.exports = function(grunt) {
         clean: {
             dist: {
                 src: ['<%= yeoman.app %>/autocomplete_template_cache.js',
-                '<%= yeoman.app %>/autocomplete_tpls.js']
+                    '<%= yeoman.app %>/autocomplete_tpls.js']
             }
         },
 
         //concat
         concat: {
-            dist:{
-                src:['<%= yeoman.app %>/autocomplete.js','<%= yeoman.app %>/autocomplete_template_cache.js'],
-                dest:'<%= yeoman.app %>/autocomplete_tpls.js'
+            dist: {
+                src: ['<%= yeoman.app %>/autocomplete.js', '<%= yeoman.app %>/autocomplete_template_cache.js'],
+                dest: '<%= yeoman.app %>/autocomplete_tpls.js'
             }
         },
 
