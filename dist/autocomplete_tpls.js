@@ -179,8 +179,7 @@ app.directive('autocomplete', function () {
                         scope.setIndex(-1);
                         scope.$apply();
                         e.preventDefault();
-                    case key.enter:
-                        scope.onEnterKeyPressed();
+
                 }
             }, true);
 
@@ -200,7 +199,7 @@ app.directive('autocomplete', function () {
                 // var l = angular.element(this).find('li').length;
                 var l = element[0].querySelectorAll('.autocomplete__suggestion').length;
                 // this allows submitting forms by pressing Enter in the autocompleted field
-                if (!scope.completing || l == 0) return;
+                // if (!scope.completing || l == 0) return;
 
                 // implementation of the up and down movement in the list of suggestions
                 switch (keycode) {
@@ -247,7 +246,6 @@ app.directive('autocomplete', function () {
                     case key.right:
                     case key.enter:
                     case key.tab:
-
                         index = scope.getIndex();
                         // scope.preSelectOff();
                         if (index !== -1) {
@@ -262,6 +260,9 @@ app.directive('autocomplete', function () {
                         }
                         scope.setIndex(-1);
                         scope.$apply();
+                        if (keycode == key.enter && scope.searchParam) {
+                            scope.onEnterKeyPressed();
+                        }
 
                         break;
                     case key.esc:
